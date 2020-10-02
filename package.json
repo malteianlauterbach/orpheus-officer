@@ -1,7 +1,7 @@
 {
-  "name": "awesomeslashcommand",
+  "name": "getcocform",
   "version": "1.0.0",
-  "description": "The awesomest slash command evar.",
+  "description": "Get the coc incident response form..",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DEGoodmanWilson/easy-peasy-slash-command-app.git"
+    "url": "git+https://github.com/malteianlauterbach/easy-peasy-slash-command-app"
   },
   "keywords": [
     "slack",
