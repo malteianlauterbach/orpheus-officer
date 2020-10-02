@@ -1,54 +1,27 @@
-//this seriously needs documentation. One daym so long it just *works*
-*/
-var Botkit = require('botkit');
+require('dotenv').config(); // loads in config from .env file
 
-if (!process.env.CLIENT_ID || !process.env.CLIENT_SECRET || !process.env.PORT || !process.env.VERIFICATION_TOKEN) {
-    console.log('Error: Specify CLIENT_ID, CLIENT_SECRET, VERIFICATION_TOKEN and PORT in environment');
-    process.exit(1);
-}
+// Imports bolt
+const { App } = require('@slack/bolt');
 
-var config = {}
-if (process.env.MONGOLAB_URI) {
-    var BotkitStorage = require('botkit-storage-mongo');
-    config = {
-        storage: BotkitStorage({mongoUri: process.env.MONGOLAB_URI}),
-    };
-} else {
-    config = {
-        json_file_store: './db_slackbutton_slash_command/',
-    };
-}
-
-var controller = Botkit.slackbot(config).configureSlackApp(
-    {
-        clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
-        scopes: ['commands'],
-    }
-);
-
-controller.setupWebserver(process.env.PORT, function (err, webserver) {
-    controller.createWebhookEndpoints(controller.webserver);
-
-    controller.createOauthEndpoints(controller.webserver, function (err, req, res) {
-        if (err) {
-            res.status(500).send('ERROR: ' + err);
-        } else {
-            res.send('Success!');
-        }
-    });
+// Builds the bolt object
+const app = new App({
+  token: process.env.BOT_TOKEN,
+  signingSecret: process.env.SIGNING_SECRET
 });
 
+// Listens for /report-form command 
+app.command('/report-form', async ({ ack, say }) => {
+  // acknowledge the request with a 200 OK
+  await ack();
 
-controller.on('slash_command', function (slashCommand, message) {
+  // Respond to the command with the link
+  await say('Report anonymously at <https://airtable.com/shrMxipa4HA4DSMLq>', { // uses < > format for links
+    response_type: 'ephemeral' // ephemeral = only visible to requester
+  })
+});
 
-    switch (message.command) {
-        case "/report-form": 
-             slashCommand.replyPrivate(message, "Heres the form: https://airtable.com/shrMxipa4HA4DSMLq")
-           
-           break;
-    }
-
+(async () => {
+  // Listen on port 3000
+  await app.listen(3000);
+  console.log('Listening on port 3000');
 })
-;
-
