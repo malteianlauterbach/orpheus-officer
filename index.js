@@ -10,12 +10,12 @@ const app = new App({
 });
 
 // Listens for /report-form command 
-app.command('/report-form', async ({ ack, say }) => {
+app.command('/report-form', async ({ ack, respond }) => {
   // acknowledge the request with a 200 OK
   await ack();
 
   // Respond to the command with the link
-  await say('Report anonymously at <https://airtable.com/shrMxipa4HA4DSMLq>', { // uses < > format for links
+  await respond('Report anonymously at <https://airtable.com/shrMxipa4HA4DSMLq>', { // uses < > format for links
     response_type: 'ephemeral' // ephemeral = only visible to requester
   })
 });
